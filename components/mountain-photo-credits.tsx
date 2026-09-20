@@ -1,0 +1,3 @@
+import credits from '@/public/mountains/credits.json';
+type Credit={slug:string;file:string;title:string;creator:string;license:string;licenseUrl:string;source:string};
+export function MountainPhotoCredits(){const items=credits as Credit[];return <section id="mountains"><h2>서울 산 BEST 10 사진</h2><p>아래 사진은 Wikimedia Commons 원본을 화면 크기에 맞게 축소해 사용했습니다. 상세 가이드의 사진 순서와 파일명이 같습니다.</p><ul>{items.map(x=><li key={x.file}><a href={x.source} target="_blank" rel="noopener noreferrer">{x.file}</a> · {x.creator||'원본 페이지 저작자'} · {x.licenseUrl?<a href={x.licenseUrl} target="_blank" rel="noopener noreferrer">{x.license}</a>:x.license}</li>)}</ul></section>}
