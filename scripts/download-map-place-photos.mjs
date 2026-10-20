@@ -4,7 +4,16 @@ import {join} from 'node:path';
 
 const root=process.cwd();
 const candidates=JSON.parse(await readFile(join(root,'scripts/map-photo-candidates.json'),'utf8'));
-const allCandidates=candidates.flatMap(item=>item.candidates);
+const extraCandidates=[
+  {title:'File:20180106 Korail Hwarangdae Stn.-2.jpg',description:'Korail Hwarangdae Stn.',creator:'Sim1992',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0',source:'https://commons.wikimedia.org/wiki/File:20180106_Korail_Hwarangdae_Stn.-2.jpg',thumbUrl:'https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/20180106_Korail_Hwarangdae_Stn.-2.jpg/1280px-20180106_Korail_Hwarangdae_Stn.-2.jpg'},
+  {title:'File:Sayukshin tomb shrine.jpg',description:'Sayukshin Shrine, Uijeolsa',creator:'Asfreeas',license:'CC BY-SA 3.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/3.0',source:'https://commons.wikimedia.org/wiki/File:Sayukshin_tomb_shrine.jpg',thumbUrl:'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Sayukshin_tomb_shrine.jpg/1280px-Sayukshin_tomb_shrine.jpg'},
+  {title:'File:The Hyundai Seoul Yeoui-dong 3.jpg',description:'The Hyundai Seoul, Yeoui-dong.',creator:'kallerna',license:'CC BY-SA 4.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/4.0',source:'https://commons.wikimedia.org/wiki/File:The_Hyundai_Seoul_Yeoui-dong_3.jpg',thumbUrl:'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/The_Hyundai_Seoul_Yeoui-dong_3.jpg/1280px-The_Hyundai_Seoul_Yeoui-dong_3.jpg'},
+  {title:'File:Korea Yongsan Family Park 20140421 10 (13939729212).jpg',description:'Yongsan Family Park, photographed by Jeon Han for Korea.net. Flickr license and VRT permission verified on Wikimedia Commons.',creator:'Korea.net / Korean Culture and Information Service (Jeon Han)',license:'CC BY-SA 2.0',licenseUrl:'https://creativecommons.org/licenses/by-sa/2.0',source:'https://commons.wikimedia.org/wiki/File:Korea_Yongsan_Family_Park_20140421_10_(13939729212).jpg',thumbUrl:'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Korea_Yongsan_Family_Park_20140421_10_%2813939729212%29.jpg/1280px-Korea_Yongsan_Family_Park_20140421_10_%2813939729212%29.jpg'},
+];
+const allCandidates=[...extraCandidates,...candidates.flatMap(item=>item.candidates)];
+const verifiedPermissionTitles=new Set([
+  'File:Korea Yongsan Family Park 20140421 10 (13939729212).jpg',
+]);
 const selected={
   coex:['File:Seoul coex fall 2014 02.JPG','코엑스 전시장 외관'],
   bongeunsa:['File:봉은사-4609050968 648755565f c.jpg','봉은사 전각과 연등'],
@@ -48,7 +57,23 @@ const selected={
   jingwansa:['File:Jinkwansa 20220725 009.jpg','북한산 자락의 진관사 전각'],
   'namdaemun-map':['File:Namdaemun market in Seoul I.jpg','남대문시장 상점가'],
   yongmasan:['File:Yongmasan (용마산) Peak 01.JPG','등산로에서 본 용마산 정상'],
+  'gyeongchun-forest':['File:20180106 Korail Hwarangdae Stn.-2.jpg','경춘선숲길에 보존된 옛 화랑대역 역사'],
+  sayuksin:['File:Sayukshin tomb shrine.jpg','사육신역사공원의 의절사 전각'],
+  'the-hyundai-seoul':['File:The Hyundai Seoul Yeoui-dong 3.jpg','더현대 서울의 밝은 실내 공간과 매장'],
+  'yongsan-family-park':['File:Korea Yongsan Family Park 20140421 10 (13939729212).jpg','용산가족공원의 울창한 숲과 햇살'],
 };
+
+const official=[
+  {
+    slug:'seongbuk-dong',
+    sourceFile:'scripts/photo-sources/seongbuk-dong.jpg',
+    imageAlt:'성북동 성북로10길 주택가의 붉은 벽돌 계단 골목',
+    imageCredit:'박유진 · 성북문화원',
+    imageSourcePage:'https://archive.sb.go.kr/isbcc/home/u/item/view/10234.do',
+    imageLicense:'공공누리 제1유형 (출처표시)',
+    imageLicenseUrl:'https://www.kogl.or.kr/info/licenseType1.do',
+  },
+];
 
 const local={
   'bukhansan-gangbuk':{image:'/mountains/bukhansan/01.jpg',imageAlt:'봄철 북한산 백운대 바위 능선',imageCredit:'Jo Hanshin',imageSourcePage:'https://commons.wikimedia.org/wiki/File:Baegundae_Terrace_of_Bukhansan_in_Spring_in_Korea.jpg',imageLicense:'CC0',imageLicenseUrl:'https://creativecommons.org/publicdomain/zero/1.0/'},
@@ -84,17 +109,32 @@ for(const [slug,item] of Object.entries(local)) manifest[slug]={...item,imageVer
 for(const [slug,[title,alt]] of Object.entries(selected)){
   const candidate=allCandidates.find(item=>item.title===title);
   if(!candidate) throw new Error(`Candidate not found: ${slug} / ${title}`);
-  if(/only for publication|korea\.net|Korean Culture and Information Service/i.test(candidate.description||'')) throw new Error(`Restricted description: ${slug}`);
+  if(/only for publication|korea\.net|Korean Culture and Information Service/i.test(candidate.description||'') && !verifiedPermissionTitles.has(title)) throw new Error(`Restricted description: ${slug}`);
   const temp=join(tempDir,`${slug}.source`);
   const output=join(outputDir,`${slug}.webp`);
   const response=await fetch(candidate.thumbUrl,{headers:{'user-agent':'SeoulPick/1.0 (photo attribution audit)'}});
   if(!response.ok) throw new Error(`${slug}: HTTP ${response.status}`);
   await writeFile(temp,Buffer.from(await response.arrayBuffer()));
-  const encoded=spawnSync('ffmpeg',['-y','-loglevel','error','-i',temp,'-vf','scale=960:720:force_original_aspect_ratio=increase,crop=960:720','-c:v','libwebp','-quality','82',output],{encoding:'utf8'});
+  const filter=slug==='yongsan-family-park'
+    ? 'scale=960:720:force_original_aspect_ratio=decrease,pad=960:720:(ow-iw)/2:(oh-ih)/2:color=#162414'
+    : 'scale=960:720:force_original_aspect_ratio=increase,crop=960:720';
+  const encoded=spawnSync('ffmpeg',['-y','-loglevel','error','-i',temp,'-vf',filter,'-c:v','libwebp','-quality','82',output],{encoding:'utf8'});
   await unlink(temp);
   if(encoded.status!==0) throw new Error(`${slug}: ${encoded.stderr}`);
   manifest[slug]={image:`/images/places/${slug}.webp`,imageAlt:alt,imageCredit:candidate.creator,imageSourcePage:candidate.source,imageLicense:candidate.license,imageLicenseUrl:candidate.licenseUrl,imageVerifiedAt:'2026-10-20'};
   console.log(`saved ${slug}`);
+}
+
+for(const item of official){
+  const temp=join(tempDir,`${item.slug}.source`);
+  const output=join(outputDir,`${item.slug}.webp`);
+  const source=await readFile(join(root,item.sourceFile));
+  await writeFile(temp,source);
+  const encoded=spawnSync('ffmpeg',['-y','-loglevel','error','-i',temp,'-vf','scale=960:720:force_original_aspect_ratio=increase,crop=960:720','-c:v','libwebp','-quality','82',output],{encoding:'utf8'});
+  await unlink(temp);
+  if(encoded.status!==0) throw new Error(`${item.slug}: ${encoded.stderr}`);
+  manifest[item.slug]={image:`/images/places/${item.slug}.webp`,imageAlt:item.imageAlt,imageCredit:item.imageCredit,imageSourcePage:item.imageSourcePage,imageLicense:item.imageLicense,imageLicenseUrl:item.imageLicenseUrl,imageVerifiedAt:'2026-10-20'};
+  console.log(`saved ${item.slug}`);
 }
 
 await writeFile(join(root,'data/map-place-photos.json'),JSON.stringify(manifest,null,2)+'\n');

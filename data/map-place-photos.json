@@ -493,5 +493,50 @@
     "imageLicense": "CC BY-SA 3.0",
     "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
     "imageVerifiedAt": "2026-10-20"
+  },
+  "gyeongchun-forest": {
+    "image": "/images/places/gyeongchun-forest.webp",
+    "imageAlt": "경춘선숲길에 보존된 옛 화랑대역 역사",
+    "imageCredit": "Sim1992",
+    "imageSourcePage": "https://commons.wikimedia.org/wiki/File:20180106_Korail_Hwarangdae_Stn.-2.jpg",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "imageVerifiedAt": "2026-10-20"
+  },
+  "sayuksin": {
+    "image": "/images/places/sayuksin.webp",
+    "imageAlt": "사육신역사공원의 의절사 전각",
+    "imageCredit": "Asfreeas",
+    "imageSourcePage": "https://commons.wikimedia.org/wiki/File:Sayukshin_tomb_shrine.jpg",
+    "imageLicense": "CC BY-SA 3.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "imageVerifiedAt": "2026-10-20"
+  },
+  "the-hyundai-seoul": {
+    "image": "/images/places/the-hyundai-seoul.webp",
+    "imageAlt": "더현대 서울의 밝은 실내 공간과 매장",
+    "imageCredit": "kallerna",
+    "imageSourcePage": "https://commons.wikimedia.org/wiki/File:The_Hyundai_Seoul_Yeoui-dong_3.jpg",
+    "imageLicense": "CC BY-SA 4.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "imageVerifiedAt": "2026-10-20"
+  },
+  "yongsan-family-park": {
+    "image": "/images/places/yongsan-family-park.webp",
+    "imageAlt": "용산가족공원의 울창한 숲과 햇살",
+    "imageCredit": "Korea.net / Korean Culture and Information Service (Jeon Han)",
+    "imageSourcePage": "https://commons.wikimedia.org/wiki/File:Korea_Yongsan_Family_Park_20140421_10_(13939729212).jpg",
+    "imageLicense": "CC BY-SA 2.0",
+    "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "imageVerifiedAt": "2026-10-20"
+  },
+  "seongbuk-dong": {
+    "image": "/images/places/seongbuk-dong.webp",
+    "imageAlt": "성북동 성북로10길 주택가의 붉은 벽돌 계단 골목",
+    "imageCredit": "박유진 · 성북문화원",
+    "imageSourcePage": "https://archive.sb.go.kr/isbcc/home/u/item/view/10234.do",
+    "imageLicense": "공공누리 제1유형 (출처표시)",
+    "imageLicenseUrl": "https://www.kogl.or.kr/info/licenseType1.do",
+    "imageVerifiedAt": "2026-10-20"
   }
 }
