@@ -1,10 +1,15 @@
+import mapPlacePhotos from '@/data/map-place-photos.json';
+
 export type MapCategory='major'|'market'|'nature'|'neighborhood';
-export type MapPlace={id:string;slug:string;name:string;districtIds:string[];category:MapCategory;summary:string;address:string;image?:string;imageAlt?:string;sourceUrl:string;verifiedAt:string;internalHref?:string};
+export type MapPlace={id:string;slug:string;name:string;districtIds:string[];category:MapCategory;summary:string;address:string;image?:string;imageAlt?:string;imageCredit?:string;imageSourcePage?:string;imageLicense?:string;imageLicenseUrl?:string;imageVerifiedAt?:string;sourceUrl:string;verifiedAt:string;internalHref?:string};
 export type MapDistrict={id:string;slug:string;name:string;nameEn:string;summary:string;keywords:string[];officialUrl:string;relatedLinks:{label:string;href:string}[]};
+
+type MapPhoto=Pick<MapPlace,'image'|'imageAlt'|'imageCredit'|'imageSourcePage'|'imageLicense'|'imageLicenseUrl'|'imageVerifiedAt'>;
+const photoBySlug=mapPlacePhotos as Record<string,MapPhoto>;
 
 const verifiedAt='2026-10-20';
 const d=(slug:string,name:string,nameEn:string,summary:string,keywords:string[],officialUrl:string,relatedLinks:MapDistrict['relatedLinks']=[]):MapDistrict=>({id:`district-${slug}`,slug,name,nameEn,summary,keywords,officialUrl,relatedLinks});
-const p=(slug:string,name:string,district:string,category:MapCategory,summary:string,address:string,sourceUrl:string,internalHref?:string,image?:string):MapPlace=>({id:`map-${slug}`,slug,name,districtIds:[`district-${district}`],category,summary,address,sourceUrl,verifiedAt,internalHref,image,imageAlt:image?`${name} 풍경`:undefined});
+const p=(slug:string,name:string,district:string,category:MapCategory,summary:string,address:string,sourceUrl:string,internalHref?:string,image?:string):MapPlace=>({id:`map-${slug}`,slug,name,districtIds:[`district-${district}`],category,summary,address,sourceUrl,verifiedAt,internalHref,image,imageAlt:image?`${name} 풍경`:undefined,...photoBySlug[slug]});
 
 export const mapCategories=[
   {id:'all',label:'전체'},{id:'major',label:'주요 명소'},{id:'market',label:'전통시장'},{id:'nature',label:'산·공원·산책'},{id:'neighborhood',label:'골목·동네'},

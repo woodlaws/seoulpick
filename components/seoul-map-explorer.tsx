@@ -15,6 +15,8 @@ type RiverFeature={geometry:{type:'LineString';coordinates:Position[]}};
 const features=(geoData as unknown as {features:Feature[]}).features;
 const riverFeature=(hangangData as unknown as {features:RiverFeature[]}).features[0];
 
+function PlacePhoto({src,alt}:{src:string;alt:string}){const [failed,setFailed]=useState(false);return failed?<div className="map-place-placeholder" role="img" aria-label={`${alt} 사진을 불러오지 못함`}><MapPin/><span>사진을 불러오지 못했습니다</span><small>출처 링크에서 원본을 확인할 수 있습니다</small></div>:<img src={src} alt={alt} loading="lazy" decoding="async" width="960" height="720" onError={()=>setFailed(true)}/>}
+
 const WIDTH=1000;
 const HEIGHT=650;
 const PAD=24;
@@ -117,8 +119,8 @@ export function SeoulMapExplorer({initialDistrict}:{initialDistrict?:string}){
       <div className="map-filters" aria-label="장소 유형 필터">{mapCategories.map(item=><button type="button" key={item.id} className={category===item.id?'active':''} aria-pressed={category===item.id} onClick={()=>setCategory(item.id)}>{item.label}</button>)}</div>
       <div className="map-result-summary" aria-live="polite"><strong>{visiblePlaces.length}곳</strong>의 장소를 보여드립니다.</div>
       {visiblePlaces.length?<div className="map-place-grid">{visiblePlaces.map(place=><article className="map-place-card" key={place.id}>
-        {place.image?<img src={place.image} alt={place.imageAlt||place.name} loading="lazy"/>:<div className="map-place-placeholder" role="img" aria-label={`${place.name} 사진 준비 중`}><MapPin/><span>{place.name}</span><small>현장 사진 준비 중</small></div>}
-        <div className="map-place-body"><span className="eyebrow-dark">{categoryName(place.category)}</span><h3>{place.name}</h3><p>{place.summary}</p><address>{place.address}</address><div className="map-card-links">{place.internalHref&&<Link className="text-link" href={place.internalHref}>서울픽에서 보기 <ArrowRight size={15}/></Link>}<a className="text-link" href={place.sourceUrl} target="_blank" rel="noopener noreferrer">공식 안내 <ExternalLink size={14}/></a></div><small>정보 확인일 {place.verifiedAt}</small></div>
+        {place.image?<PlacePhoto src={place.image} alt={place.imageAlt||place.name}/>:<div className="map-place-placeholder" role="img" aria-label={`${place.name} 사진 준비 중`}><MapPin/><span>{place.name}</span><small>사용 조건이 확인된 현장 사진 준비 중</small></div>}
+        <div className="map-place-body"><span className="eyebrow-dark">{categoryName(place.category)}</span><h3>{place.name}</h3><p>{place.summary}</p><address>{place.address}</address><div className="map-card-links">{place.internalHref&&<Link className="text-link" href={place.internalHref}>서울픽에서 보기 <ArrowRight size={15}/></Link>}<a className="text-link" href={place.sourceUrl} target="_blank" rel="noopener noreferrer">공식 안내 <ExternalLink size={14}/></a></div>{place.imageCredit&&place.imageSourcePage&&<p className="map-photo-credit">사진: <a href={place.imageSourcePage} target="_blank" rel="noopener noreferrer">{place.imageCredit}</a>{place.imageLicense&&<> · {place.imageLicenseUrl?<a href={place.imageLicenseUrl} target="_blank" rel="noopener noreferrer">{place.imageLicense}</a>:place.imageLicense}</>}</p>}<small>정보 확인일 {place.verifiedAt}</small></div>
       </article>)}</div>:<div className="empty"><MapPin size={34}/><h3>이 유형의 장소를 준비하고 있습니다</h3><p>다른 필터를 선택하거나 지역 전체 장소를 확인해 주세요.</p></div>}
     </section>
 
