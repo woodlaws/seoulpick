@@ -93,7 +93,7 @@ export function SeoulMapExplorer({initialDistrict}:{initialDistrict?:string}){
             <text x={riverLabelPoint[0]} y={riverLabelPoint[1]} textAnchor="middle" dominantBaseline="central">한강</text>
           </g>
           <g className="map-label-layer" aria-hidden="true">{featureDistricts.map(({feature,district})=>{
-            if(!district)return null;const [labelX,labelY]=labelPoint(feature);return <text key={district.slug} className={selected?.slug===district.slug?'is-selected':''} x={labelX} y={labelY} textAnchor="middle" dominantBaseline="central">{district.name.replace('구','')}</text>;
+            if(!district)return null;const [labelX,labelY]=labelPoint(feature);return <text key={district.slug} className={selected?.slug===district.slug?'is-selected':''} x={labelX} y={labelY} textAnchor="middle" dominantBaseline="central">{district.name}</text>;
           })}</g>
         </svg>
         <p className="map-attribution">자치구 경계: KOSTAT SGIS·JUSO / 한강: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors, ODbL</a></p>
