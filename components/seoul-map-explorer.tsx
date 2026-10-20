@@ -76,6 +76,7 @@ export function SeoulMapExplorer({initialDistrict}:{initialDistrict?:string}){
         <svg className="seoul-district-map" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby="map-title map-desc">
           <title id="map-title">서울 25개 자치구 선택 지도</title>
           <desc id="map-desc">서울 25개 자치구와 실제 한강 수계가 표시됩니다. 자치구를 선택하면 지도 아래에 해당 지역 소개와 대표 장소가 표시됩니다.</desc>
+          <defs><clipPath id="seoul-boundary-clip">{features.map(feature=><path key={feature.properties.name} d={featurePath(feature)} fillRule="evenodd"/>)}</clipPath></defs>
           {featureDistricts.map(({feature,district})=>{
             if(!district)return null;
             const isSelected=selected?.slug===district.slug;
@@ -87,7 +88,7 @@ export function SeoulMapExplorer({initialDistrict}:{initialDistrict?:string}){
               <path d={featurePath(feature)} fillRule="evenodd"/>
             </g>;
           })}
-          <g className="hangang-layer" aria-hidden="true">
+          <g className="hangang-layer" clipPath="url(#seoul-boundary-clip)" aria-hidden="true">
             <path className="hangang-halo" d={riverPath}/><path className="hangang-river" d={riverPath}/>
             <text x={riverLabelPoint[0]} y={riverLabelPoint[1]} textAnchor="middle" dominantBaseline="central">한강</text>
           </g>
