@@ -910,6 +910,58 @@
       "license": "CC0",
       "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "verifiedAt": "2026-09-18"
+    },
+    "img-markets-dongmyo-v1": {
+      "imageId": "img-markets-dongmyo-v1",
+      "path": "/images/markets/dongmyo.jpg",
+      "alt": "동묘 벼룩시장 돌담 앞에 펼쳐진 중고품 노점",
+      "width": 1920,
+      "height": 1440,
+      "focus": "50% 52%",
+      "credit": "Seefooddiet",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Dongmyo_Flea_Market_Jan_2024_03.jpg",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "verifiedAt": "2026-10-20"
+    },
+    "img-markets-seoul-folk-flea-v1": {
+      "imageId": "img-markets-seoul-folk-flea-v1",
+      "path": "/images/markets/seoul-folk-flea.jpg",
+      "alt": "서울풍물시장 안의 오래된 생활용품과 풍물 점포",
+      "width": 1920,
+      "height": 1011,
+      "focus": "50% 50%",
+      "credit": "Korea.net / 전한",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:KOCIS_Korea_SeoulFolkFleaMarket_03_(8642473964).jpg",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "verifiedAt": "2026-10-20"
+    },
+    "img-markets-seoul-jungang-v1": {
+      "imageId": "img-markets-seoul-jungang-v1",
+      "path": "/images/markets/seoul-jungang.jpg",
+      "alt": "신당동 서울중앙시장의 아케이드와 식재료 점포",
+      "width": 1920,
+      "height": 1440,
+      "focus": "50% 50%",
+      "credit": "hyolee2",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Seoul_Jungang_Market.JPG",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "verifiedAt": "2026-10-20"
+    },
+    "img-markets-yeongcheon-v1": {
+      "imageId": "img-markets-yeongcheon-v1",
+      "path": "/images/markets/yeongcheon.jpg",
+      "alt": "독립문 영천시장 입구와 시장 간판",
+      "width": 1920,
+      "height": 1440,
+      "focus": "50% 48%",
+      "credit": "MonasteryInwang",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:YeongcheonTraditionalMarket.jpg",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verifiedAt": "2026-10-20"
     }
   },
   "places": {
@@ -1861,6 +1913,65 @@
       ],
       "representativeImageId": "img-images-content-yeonnam-park-v1",
       "additionalImageIds": [],
+      "photoStatus": "ready"
+    },
+    "dongmyo-flea-market": {
+      "placeId": "dongmyo-flea-market",
+      "slug": "dongmyo-flea-market",
+      "name": "동묘 벼룩시장",
+      "districtIds": [
+        "district-jongno"
+      ],
+      "representativeImageId": "img-markets-dongmyo-v1",
+      "additionalImageIds": [],
+      "internalHref": "/blog/series/seoul-traditional-markets/dongmyo-flea-market",
+      "photoStatus": "ready"
+    },
+    "seoul-folk-flea-market": {
+      "placeId": "seoul-folk-flea-market",
+      "slug": "seoul-folk-flea-market",
+      "name": "서울풍물시장",
+      "districtIds": [
+        "district-dongdaemun"
+      ],
+      "representativeImageId": "img-markets-seoul-folk-flea-v1",
+      "additionalImageIds": [],
+      "internalHref": "/blog/series/seoul-traditional-markets/seoul-folk-flea-market",
+      "photoStatus": "ready"
+    },
+    "seoul-jungang-market": {
+      "placeId": "seoul-jungang-market",
+      "slug": "seoul-jungang-market",
+      "name": "서울중앙시장",
+      "districtIds": [
+        "district-jung"
+      ],
+      "representativeImageId": "img-markets-seoul-jungang-v1",
+      "additionalImageIds": [],
+      "internalHref": "/blog/series/seoul-traditional-markets/seoul-jungang-market",
+      "photoStatus": "ready"
+    },
+    "gongneung-dokkaebi-market": {
+      "placeId": "gongneung-dokkaebi-market",
+      "slug": "gongneung-dokkaebi-market",
+      "name": "공릉동도깨비시장",
+      "districtIds": [
+        "district-nowon"
+      ],
+      "additionalImageIds": [],
+      "internalHref": "/blog/series/seoul-traditional-markets/gongneung-dokkaebi-market",
+      "photoStatus": "missing"
+    },
+    "yeongcheon-market": {
+      "placeId": "yeongcheon-market",
+      "slug": "yeongcheon-market",
+      "name": "독립문 영천시장",
+      "districtIds": [
+        "district-seodaemun"
+      ],
+      "representativeImageId": "img-markets-yeongcheon-v1",
+      "additionalImageIds": [],
+      "internalHref": "/blog/series/seoul-traditional-markets/yeongcheon-market",
       "photoStatus": "ready"
     }
   }
