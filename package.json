@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint app components data",
     "check:blog": "node scripts/check-blog.mjs",
-    "check:images": "node scripts/check-images.mjs"
+    "check:images": "node scripts/check-images.mjs",
+    "check:place-media": "node scripts/check-place-media.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",

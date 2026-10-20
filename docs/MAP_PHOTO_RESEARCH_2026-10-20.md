@@ -39,5 +39,5 @@
 
 - 추가 사진은 `public/images/places/*.webp`에 960×720 카드 자산으로 저장한다.
 - 성북동 원본은 공식 아카이브 서버의 Node 인증서 체인 문제 때문에 검증 당시 내려받은 원본을 `scripts/photo-sources/seongbuk-dong.jpg`에 보관하고 재현 가능한 변환 입력으로 사용한다.
-- 각 사진의 저작자, 원문, 라이선스, 라이선스 URL, 확인일은 `data/map-place-photos.json`에 장소 slug로 연결한다.
+- 각 사진의 저작자, 원문, 라이선스, 라이선스 URL, 확인일은 공통 `data/place-media.json`의 이미지 ID로 관리하고 장소의 `representativeImageId`로 연결한다.
 - 보류 사진은 공개 매니페스트에 넣지 않으며 기존 빈 상태를 유지한다.
