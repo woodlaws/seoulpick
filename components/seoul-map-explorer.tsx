@@ -5,12 +5,15 @@ import {useRouter,useSearchParams} from 'next/navigation';
 import {useMemo,useRef,useState} from 'react';
 import {ArrowRight,ExternalLink,MapPin} from 'lucide-react';
 import geoData from '@/data/seoul-districts.json';
+import hangangData from '@/data/hangang.json';
 import {districtBySlug,mapCategories,mapDistricts,placesForDistrict,type MapCategory} from '@/data/seoul-map';
 
 type Position=[number,number];
 type Geometry={type:'Polygon'|'MultiPolygon';coordinates:Position[][]|Position[][][]};
 type Feature={properties:{name:string};geometry:Geometry};
+type RiverFeature={geometry:{type:'LineString';coordinates:Position[]}};
 const features=(geoData as unknown as {features:Feature[]}).features;
+const riverFeature=(hangangData as unknown as {features:RiverFeature[]}).features[0];
 
 const WIDTH=1000;
 const HEIGHT=650;
@@ -31,6 +34,9 @@ const ringPath=(ring:Position[])=>ring.map((point,index)=>`${index?'L':'M'}${pro
 const featurePath=(feature:Feature)=>feature.geometry.type==='Polygon'
   ?(feature.geometry.coordinates as Position[][]).map(ringPath).join(' ')
   :(feature.geometry.coordinates as Position[][][]).flatMap(polygon=>polygon.map(ringPath)).join(' ');
+const riverPath=riverFeature.geometry.coordinates.map((point,index)=>`${index?'L':'M'}${project(point)[0].toFixed(1)} ${project(point)[1].toFixed(1)}`).join(' ');
+const visibleRiverPoints=riverFeature.geometry.coordinates.filter(([x,y])=>x>=minX&&x<=maxX&&y>=minY&&y<=maxY);
+const riverLabelPoint=project(visibleRiverPoints[Math.floor(visibleRiverPoints.length/2)]);
 const labelPoint=(feature:Feature):Position=>{
   const points=feature.geometry.type==='Polygon'?(feature.geometry.coordinates as Position[][])[0]:(feature.geometry.coordinates as Position[][][])[0][0];
   const projected=points.map(project);
@@ -65,24 +71,31 @@ export function SeoulMapExplorer({initialDistrict}:{initialDistrict?:string}){
         <div><span className="accent-caption">25개 자치구</span><h2 id="seoul-map-heading">지도에서 여행 지역을 골라보세요</h2></div>
         <p>마우스를 올려 구역을 확인하고, 클릭하거나 키보드 Enter 키로 선택할 수 있습니다.</p>
       </div>
+      <div className="map-legend" aria-label="지도 색상 안내"><span><i className="base"/>기본</span><span><i className="hover"/>호버</span><span><i className="selected"/>선택</span><span><i className="river"/>한강</span></div>
       <div className="seoul-map-frame">
         <svg className="seoul-district-map" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby="map-title map-desc">
           <title id="map-title">서울 25개 자치구 선택 지도</title>
-          <desc id="map-desc">자치구를 선택하면 지도 아래에 해당 지역 소개와 대표 장소가 표시됩니다.</desc>
+          <desc id="map-desc">서울 25개 자치구와 실제 한강 수계가 표시됩니다. 자치구를 선택하면 지도 아래에 해당 지역 소개와 대표 장소가 표시됩니다.</desc>
           {featureDistricts.map(({feature,district})=>{
             if(!district)return null;
             const isSelected=selected?.slug===district.slug;
             const isHovered=hovered===district.slug;
-            const [labelX,labelY]=labelPoint(feature);
             return <g key={district.slug} role="button" tabIndex={0} aria-label={`${district.name} 선택`} aria-pressed={isSelected}
               className={`map-district${isSelected?' is-selected':''}${isHovered?' is-hovered':''}`}
               onPointerEnter={()=>setHovered(district.slug)} onPointerLeave={()=>setHovered(null)} onFocus={()=>setHovered(district.slug)} onBlur={()=>setHovered(null)}
               onClick={()=>choose(district.slug)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(district.slug)}}}>
               <path d={featurePath(feature)} fillRule="evenodd"/>
-              <text x={labelX} y={labelY} textAnchor="middle" dominantBaseline="central">{district.name.replace('구','')}</text>
             </g>;
           })}
+          <g className="hangang-layer" aria-hidden="true">
+            <path className="hangang-halo" d={riverPath}/><path className="hangang-river" d={riverPath}/>
+            <text x={riverLabelPoint[0]} y={riverLabelPoint[1]} textAnchor="middle" dominantBaseline="central">한강</text>
+          </g>
+          <g className="map-label-layer" aria-hidden="true">{featureDistricts.map(({feature,district})=>{
+            if(!district)return null;const [labelX,labelY]=labelPoint(feature);return <text key={district.slug} className={selected?.slug===district.slug?'is-selected':''} x={labelX} y={labelY} textAnchor="middle" dominantBaseline="central">{district.name.replace('구','')}</text>;
+          })}</g>
         </svg>
+        <p className="map-attribution">자치구 경계: KOSTAT SGIS·JUSO / 한강: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors, ODbL</a></p>
       </div>
       <div className="map-selector">
         <label htmlFor="district-select">자치구 선택</label>
